@@ -46,7 +46,7 @@ $DBType = 'mysqli';
 
 // sql user & password
 $DBUser = 'root';
-$DBPassword = '20Kukzan09';
+$DBPassword = 'r gk';
 
 // It would probably be inappropraite to allow selection of the company in a hosted envionment so this option can be switched to 'ShowInputBox' or 'Hide'
 // depending if you allow the user to select the name of the company or must use the default one described at $DefaultCompany
@@ -118,7 +118,7 @@ error_reporting(E_ALL && ~E_NOTICE && E_WARNING);
 $CompanyList[0] = array('database'=>'weberp_nesuda' ,'company'=>'NESUDA');
 $CompanyList[1] = array('database'=>'weberp_ostech' ,'company'=>'weberp ostech');
 $CompanyList[2] = array('database'=>'weberp_aicc' ,'company'=>'weberp AICC updated' );
-$CompanyList[3] = array('database'=>'weberp_bajuta' ,'company'=>'weberp bajuta' );
+$CompanyList[3] = array('database'=>'weberp' ,'company'=>'weberp bajuta' );
 //$CompanyList[4] = array('database'=>'weberp_phil_updated' ,'company'=>'webERP Phil Updated' );
 //$CompanyList[4] = array('database'=>'weberp_default' ,'company'=>'weberp_4.15 demo');
 /*Make sure there is nothing - not even spaces after this last ?> */

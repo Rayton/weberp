@@ -777,13 +777,14 @@
 		return $Errors;
 	}
 
-	function StockAdjustment($StockID, $Location, $Quantity, $TranDate,$user, $password) {
+	function StockAdjustment($StockID, $Location, $Quantity, $TranDateDescription, $user, $password) {
 		$Errors = array();
 		$db = db($user, $password);
 		if (gettype($db)=='integer') {
 			$Errors[0]=NoAuthorisation;
 			return $Errors;
 		}
+		list($TranDate, $description) = explode("_",$TranDateDescription);
 		$Errors = VerifyStockCodeExists($StockID, sizeof($Errors), $Errors);
 		/*
 		$balances=GetStockBalance($StockID, $user, $password);
@@ -828,7 +829,7 @@
                                        '".$Location."',
                                        '".$TranDate."',
                                        '".GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors)."',
-                                       'Dispensed By Care2x',
+                                       '".$description."',
                                        '" .$Quantity."',
                                        '" .$newqoh."')";
 		$locstocksql='UPDATE locstock SET quantity = quantity + '.$Quantity."
