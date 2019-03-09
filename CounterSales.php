@@ -12,11 +12,12 @@ $Title = _('Counter Sales');
 $ViewTopic= 'SalesOrders';
 $BookMark = 'SalesOrderCounterSales';
 
+$_POST['PartSearch'] = "Part Search";
+
 include('includes/header.php');
 include('includes/GetPrice.inc');
 include('includes/SQL_CommonFunctions.inc');
 include('includes/GetSalesTransGLCodes.inc');
-include('includes/ItemSearch.php');
 
 $AlreadyWarnedAboutCredit = false;
 
@@ -232,7 +233,7 @@ if (isset($_POST['CancelOrder'])) {
 	echo '</p>';
 }
 
-if (isset($_POST['Search']) or isset($_POST['Next']) or isset($_POST['Previous'])){
+if (isset($_POST['Search']) or isset($_POST['Next']) or isset($_POST['Previous'])  or isset($_POST['ajaxSearch']) ){
 
 	if ($_POST['Keywords']!='' AND $_POST['StockCode']=='') {
 		$msg = _('Item description has been used in search');
@@ -2217,11 +2218,11 @@ if (!isset($_POST['ProcessSale'])){
 
 		echo '</select></td>
 				<td><b>' . _('Enter partial Description') . ':</b>
-				<input tabindex="2" type="text" autofocus="autofocus" name="Keywords" size="20" maxlength="25" value="';
+				<input tabindex="2" type="text" autofocus="autofocus" name="Keywords" id="keywordsInput" size="20" maxlength="25" value="';
         if (isset($_POST['Keywords'])) echo $_POST['Keywords'];
         echo '" /></td>
 				<td align="right"><b> ' . _('OR') . ' </b><b>' . _('Enter extract of the Stock Code') . ':</b>
-				<input tabindex="3" type="text" name="StockCode" size="15" maxlength="18" value="';
+				<input tabindex="3" type="text" name="StockCode" size="15" id="stockcodeInput" maxlength="18" value="';
         if (isset($_POST['StockCode'])) echo $_POST['StockCode'];
         echo '" /></td>
 			</tr>
@@ -2379,3 +2380,45 @@ if (!isset($_POST['ProcessSale'])){
 }
 include('includes/footer.php');
 ?>
+
+<script>	
+
+
+var typingTimer;
+var doneTypingInterval = 700;
+
+document.getElementById("keywordsInput").addEventListener("keyup", incrementTimer);
+document.getElementById("stockcodeInput").addEventListener("keyup", incrementTimer);
+
+document.getElementById("keywordsInput").addEventListener("keydown", resetTimer);
+document.getElementById("stockcodeInput").addEventListener("keydown", resetTimer);
+
+
+
+function incrementTimer() {
+	clearTimeout(typingTimer);
+  	typingTimer = setTimeout(doneTyping, doneTypingInterval);	
+}
+
+function resetTimer() {
+  clearTimeout(typingTimer);
+}
+
+
+//user is "finished typing," do something
+function doneTyping () {
+  	var searchForm = document.getElementById('SelectParts');
+  	searchForm.elements["PartSearch"].value = 'Part Search';
+  	searchForm.elements["Search"].value = 'Search Now';
+
+  	var searchAction = document.createElement("input");
+  	searchAction.setAttribute("type", "hidden");
+  	searchAction.setAttribute("name", "ajaxSearch");
+  	searchAction.setAttribute("value", "Search Now");
+  	searchForm.appendChild(searchAction);
+
+  	searchForm.submit();
+
+}
+
+</script>
