@@ -4,6 +4,8 @@
 /** STANDARD MESSAGE HANDLING & FORMATTING **/
 /*  ******************************************  */
 
+
+
 function prnMsg($Msg, $Type = 'info', $Prefix = '') {
 	global $Messages;
 	$Messages[] = array(
@@ -12,8 +14,55 @@ function prnMsg($Msg, $Type = 'info', $Prefix = '') {
 		$Prefix
 	);
 
+	?>
+
+	<style>
+
+	.alert {
+	    position: relative;
+	    padding: .75rem 1.25rem;
+	    margin-bottom: 1rem;
+	    border: 1px solid transparent;
+	    border-radius: .25rem;
+	    margin: 0 auto;
+	    width: 79%;
+	}
+
+	.alert-success {
+	    color: #155724;
+	    background-color: #d4edda;
+	    border-color: #c3e6cb;
+	}
+
+	.alert-error {
+	    color: #721c24;
+	    background-color: #f8d7da;
+	    border-color: #f5c6cb;
+	}
+
+	.alert-info {
+	    color: #0c5460;
+	    background-color: #d1ecf1;
+	    border-color: #bee5eb;
+	}
+
+	.alert-warn {
+	    color: #856404;
+	    background-color: #fff3cd;
+	    border-color: #ffeeba;
+	}
+
+	</style>
+	<div class="alert alert-<?php echo $Type  ?>">
+		
+	<?php
 	echo $Messages[0][0].'<br>';
 	echo $Messages[0][1].'<br>';
+
+	?>
+	</div>
+
+	<?php
 
 
 

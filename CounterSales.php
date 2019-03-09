@@ -16,6 +16,7 @@ include('includes/header.php');
 include('includes/GetPrice.inc');
 include('includes/SQL_CommonFunctions.inc');
 include('includes/GetSalesTransGLCodes.inc');
+include('includes/ItemSearch.php');
 
 $AlreadyWarnedAboutCredit = false;
 
