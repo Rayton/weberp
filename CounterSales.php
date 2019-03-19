@@ -911,6 +911,7 @@ if (count($_SESSION['Items'.$identifier]->LineItems)>0 ){ /*only show order line
 	echo '<table class="selection">'; // a new nested table in the second column of master table
 	//now the payment stuff in this column
 	$PaymentMethodsResult = DB_query("SELECT paymentid, paymentname FROM paymentmethods");
+	$preferedMethod = "Cash";
 
 	echo '<tr>
 			<td>' . _('Payment Type') . ':</td>
@@ -919,22 +920,36 @@ if (count($_SESSION['Items'.$identifier]->LineItems)>0 ){ /*only show order line
 		if (isset($_POST['PaymentMethod']) AND $_POST['PaymentMethod'] == $PaymentMethodRow['paymentid']){
 			echo '<option selected="selected" value="' . $PaymentMethodRow['paymentid'] . '">' . $PaymentMethodRow['paymentname'] . '</option>';
 		} else {
-			echo '<option value="' . $PaymentMethodRow['paymentid'] . '">' . $PaymentMethodRow['paymentname'] . '</option>';
+			$selected = ($PaymentMethodRow['paymentname'] == $preferedMethod)?"selected":"";
+			echo '<option '. $selected .' value="' . $PaymentMethodRow['paymentid'] . '">' . $PaymentMethodRow['paymentname'] . '</option>';
 		}
 	}
 	echo '</select></td>
 		</tr>';
+	$userID = $_SESSION['UserID'];
 
 	$BankAccountsResult = DB_query("SELECT bankaccountname, accountcode FROM bankaccounts");
+	$authorizedAccountResult = DB_query("SELECT accountcode FROM bankaccountusers WHERE userid = '$userID' ");
+
+	$bankAccounts = array();
+	$userBankAccounts = array();
+
+	while ($BankAccountsRow = DB_fetch_array($BankAccountsResult)){
+		array_push($bankAccounts, array('bankaccountname' => $BankAccountsRow['bankaccountname'], 'accountcode' => $BankAccountsRow['accountcode']));
+	}
+
+	while ($userAccountRow = DB_fetch_array($authorizedAccountResult)){
+		array_push($userBankAccounts, array('accountcode' =>$userAccountRow['accountcode']));
+	}
 
 	echo '<tr>
 			<td>' . _('Banked to') . ':</td>
 			<td><select name="BankAccount">';
-	while ($BankAccountsRow = DB_fetch_array($BankAccountsResult)){
-		if (isset($_POST['BankAccount']) AND $_POST['BankAccount']	== $BankAccountsRow['accountcode']){
-			echo '<option selected="selected" value="' . $BankAccountsRow['accountcode'] . '">' . $BankAccountsRow['bankaccountname'] . '</option>';
-		} else {
-			echo '<option value="' . $BankAccountsRow['accountcode'] . '">' . $BankAccountsRow['bankaccountname'] . '</option>';
+	foreach($bankAccounts as $bankAccount){
+		foreach ($userBankAccounts as $userBankAccount) {
+			if ($bankAccount['accountcode'] == $userBankAccount['accountcode']) {
+					echo '<option value="' . $bankAccount['accountcode'] . '">' . $bankAccount['bankaccountname'] . '</option>';
+			}
 		}
 	}
 	echo '</select></td>
