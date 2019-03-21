@@ -84,11 +84,11 @@
 		}
 
 		if (isset($_SESSION['Favourites']) AND count($_SESSION['Favourites'])>0) {
-			echo '<ul>';
-			foreach ($_SESSION['Favourites'] as $url=>$ttl) {
-				echo '<li><a href="', $url, '">', _($ttl), '<a></li>';
-			}
-			echo '</ul>';
+			// echo '<ul>';
+			// foreach ($_SESSION['Favourites'] as $url=>$ttl) {
+			// 	echo '<li><a href="', $url, '">', _($ttl), '<a></li>';
+			// }
+			// echo '</ul>';
 		}
 
 		echo '</li>'; //take off inline formatting, use CSS instead ===HJ===

@@ -98,21 +98,12 @@ echo '<input type="hidden" name="FormID" value="' . $_SESSION['FormID'] . '" />'
 	echo'<tr>
 			<th colspan="4">' . _('Entering Stock Issues') . ': ' . $StkCatRow[0] . '</th>
 		</tr>
+
 		<tr>
-			<th>' . _('Stock Code') . '</th>
-			<th>' . _('Partial Description') . '</th>
-			<th>' . _('Adjustment to Stock At Location') . '</th>
-			<th>' . _('Adjustment Quantity') . '</th>
-			<th>' . _('Select Tag') . '</th>
-		</tr>';
-
-	for ($RowCount=1;$RowCount<=$numRows;$RowCount++){
-
-		echo '<tr>
-				<td><input type="text" required id="stockcode'.$RowCount .'" name="StockCode_' . $RowCount . '" maxlength="20" size="20" /></td>
-				<td><input type="text" required id="stockdescription'.$RowCount .'" name="StockDescription_' . $RowCount . '" maxlength="20" size="20" /></td>
-				<td>
-				<select name="StockLocation_' . $RowCount . '" id="">';
+			<td class="centre">Stock Location</td>
+			<td colspan="4">
+				<select name="StockLocation" required id="">';
+				echo "<option value=''>Select Location</option>";
 
 				foreach ($locations as $location) {
 					$locationcode = $location['code'];
@@ -122,7 +113,23 @@ echo '<input type="hidden" name="FormID" value="' . $_SESSION['FormID'] . '" />'
 				
 				echo '</select>
 				</td>
+		</tr>
 
+		<tr>
+			<th>' . _('Stock Code') . '</th>
+			<th>' . _('Partial Description') . '</th>
+			<th>' . _('Adjustment Quantity') . '</th>
+			<th>' . _('Select Tag') . '</th>
+		</tr>
+
+		';
+
+	for ($RowCount=1;$RowCount<=$numRows;$RowCount++){
+
+		echo '<tr>
+				<td><input type="text" required id="stockcode'.$RowCount .'" name="StockCode_' . $RowCount . '" maxlength="20" size="20" /></td>
+				<td><input type="text" required id="stockdescription'.$RowCount .'" name="StockDescription_' . $RowCount . '" maxlength="50" size="50" /></td>
+				
 				<td><input type="text" required name="StockQuantity_' . $RowCount . '" maxlength="20" size="20" /></td>
 				<td>
 				<select name="StockTag_' . $RowCount . '" id=""><option value="0">0 - ' . _('None') . '</option>';

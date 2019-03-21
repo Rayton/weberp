@@ -14,7 +14,7 @@ for ($i=1; $i <= $rows; $i++) {
 
 	$stockID = $_POST['StockCode_'.$i];
 	$stockDescription = $_POST['StockDescription_'.$i];
-	$stockLocation = $_POST['StockLocation_'.$i];
+	$stockLocation = $_POST['StockLocation'];
 	$stockQuantity = $_POST['StockQuantity_'.$i];
 	$stockTag = $_POST['StockTag_'.$i];
 
