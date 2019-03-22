@@ -72,7 +72,14 @@ if(isset($ForceConfigReload) AND $ForceConfigReload==true OR !isset($_SESSION['C
 					gllink_debtors,
 					gllink_creditors,
 					gllink_stock,
-					decimalplaces
+					decimalplaces,
+					location_1,
+					location_2,
+					office_1,
+					office_2,
+					fax_2,
+					telephone_2,
+					website
 				FROM companies
 				INNER JOIN currencies ON companies.currencydefault=currencies.currabrev
 				WHERE coycode=1";

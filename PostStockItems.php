@@ -163,7 +163,7 @@ for ($i=1; $i <= $rows; $i++) {
 			$CheckNegRow = DB_fetch_array($CheckNegResult);
 			if ($CheckNegRow['quantity']+$_SESSION['Adjustment' . $identifier]->Quantity <0){
 				$InputError=true;
-			$message = array('name' => 'Stock '. $stockID.' '.$stockDescription  . ' Not Adjustmented. The system parameters are set to prohibit negative stocks. Processing this stock adjustment would result in negative stock at this location. This adjustment will not be processed', "type" => 'error');
+			$message = array('name' => 'Stock '. $stockID.' '.$stockDescription  . ' Not Adjusted. The system parameters are set to prohibit negative stocks. Processing this stock adjustment would result in negative stock at this location. This adjustment will not be processed', "type" => 'error');
 			array_push($messages, $message);
 			}
 		}

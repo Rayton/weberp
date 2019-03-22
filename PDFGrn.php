@@ -12,6 +12,7 @@ if (isset($_GET['GRNNo'])) {
 $FormDesign = simplexml_load_file($PathPrefix.'companies/'.$_SESSION['DatabaseName'].'/FormDesigns/GoodsReceived.xml');
 
 // Set the paper size/orintation
+$FormDesign->PaperSize = "A4";
 $PaperSize = $FormDesign->PaperSize;
 $line_height=$FormDesign->LineHeight;
 include('includes/PDFStarter.php');
@@ -48,6 +49,9 @@ if ($GRNNo == 'Preview'){
 				grns.supplierref,
 				purchorderdetails.suppliersunit,
 				purchorderdetails.conversionfactor,
+				purchorderdetails.unitprice,
+				purchorderdetails.quantityrecd,
+				purchorderdetails.quantityord,
 				stockmaster.units,
 				stockmaster.decimalplaces
 			FROM grns INNER JOIN purchorderdetails
@@ -83,8 +87,13 @@ if ($NoOfGRNs >0){
 	include ('includes/PDFGrnHeader.inc'); //head up the page
 
 	$FooterPrintedInPage= 0;
+	$FormDesign->Data->y = 350;
 	$YPos=$FormDesign->Data->y;
+	$total = 0;
+
 	for ($i=1;$i<=$NoOfGRNs;$i++) {
+
+
 		if ($GRNNo!='Preview'){
 			$myrow = DB_fetch_array($GRNResult);
 		}
@@ -101,15 +110,21 @@ if ($NoOfGRNs >0){
 		$OurUnitsQuantity=locale_number_format($myrow['qtyrecd'],$DecimalPlaces);
 		$DeliveryDate = ConvertSQLDate($myrow['deliverydate']);
 
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column1->x,$Page_Height-$YPos,$FormDesign->Data->Column1->Length,$FormDesign->Data->Column1->FontSize, $myrow['itemcode']);
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column2->x,$Page_Height-$YPos,$FormDesign->Data->Column2->Length,$FormDesign->Data->Column2->FontSize, $myrow['itemdescription']);
+		$LeftOvers = $pdf->addTextWrap(32,$Page_Height-$YPos,$FormDesign->Data->Column1->Length,'9.3', $myrow['itemcode']);
+		$LeftOvers = $pdf->addTextWrap(100,$Page_Height-$YPos,$FormDesign->Data->Column2->Length,'9.3', $myrow['itemdescription']);
 		/*$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column3->x,$Page_Height-$YPos,$FormDesign->Data->Column3->Length,$FormDesign->Data->Column3->FontSize, $DeliveryDate);*/
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column3->x,$Page_Height-$YPos,$FormDesign->Data->Column3->Length,$FormDesign->Data->Column3->FontSize, $DeliveryDate, 'right');
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column4->x,$Page_Height-$YPos,$FormDesign->Data->Column4->Length,$FormDesign->Data->Column4->FontSize, $SuppliersQuantity, 'right');
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column5->x,$Page_Height-$YPos,$FormDesign->Data->Column5->Length,$FormDesign->Data->Column5->FontSize, $myrow['suppliersunit'], 'left');
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column6->x,$Page_Height-$YPos,$FormDesign->Data->Column6->Length,$FormDesign->Data->Column6->FontSize, $OurUnitsQuantity, 'right');
-		$LeftOvers = $pdf->addTextWrap($FormDesign->Data->Column7->x,$Page_Height-$YPos,$FormDesign->Data->Column7->Length,$FormDesign->Data->Column7->FontSize, $myrow['units'], 'left');
+		$LeftOvers = $pdf->addTextWrap(250,$Page_Height-$YPos,$FormDesign->Data->Column3->Length,'9.3', $DeliveryDate, 'left');
+		$LeftOvers = $pdf->addTextWrap(300,$Page_Height-$YPos,$FormDesign->Data->Column4->Length,'9.3', $myrow['quantityord'], 'center');
+		$LeftOvers = $pdf->addTextWrap(350,$Page_Height-$YPos,$FormDesign->Data->Column5->Length,'9.3', $myrow['qtyrecd'], 'center');
+		$LeftOvers = $pdf->addTextWrap(400,$Page_Height-$YPos,$FormDesign->Data->Column6->Length,'9.3', number_format($myrow['quantityord'] - $myrow['quantityrecd'], 2), 'center');
+		$LeftOvers = $pdf->addTextWrap(460,$Page_Height-$YPos, 40,'9.3', number_format($myrow['unitprice'], 2), 'right');
+		$rowTotal = $myrow['unitprice'] * $myrow['qtyrecd'];
+		$total += $rowTotal;
+
+		$LeftOvers = $pdf->addTextWrap(520,$Page_Height-$YPos, 45,'9.3',number_format( $rowTotal, 2) , 'right');
 		$YPos += $line_height;
+
+
 
 		/* move to after serial print
 		if($FooterPrintedInPage == 0){
@@ -163,11 +178,63 @@ if ($NoOfGRNs >0){
 		} //controlled item*/
 
 		if($FooterPrintedInPage == 0){
-			$LeftOvers = $pdf->addText($FormDesign->ReceiptDate->x,$Page_Height-$FormDesign->ReceiptDate->y,$FormDesign->ReceiptDate->FontSize, _('Date of Receipt: ') . $DeliveryDate);
-			$LeftOvers = $pdf->addText($FormDesign->SignedFor->x,$Page_Height-$FormDesign->SignedFor->y,$FormDesign->SignedFor->FontSize, _('Signed for ').'______________________');
+			// $LeftOvers = $pdf->addText($FormDesign->ReceiptDate->x,$Page_Height-$FormDesign->ReceiptDate->y,$FormDesign->ReceiptDate->FontSize, _('Date of Receipt: ') . $DeliveryDate);
+			// $LeftOvers = $pdf->addText($FormDesign->SignedFor->x,$Page_Height-$FormDesign->SignedFor->y,$FormDesign->SignedFor->FontSize, _('Signed for ').'______________________');
+			
 			$FooterPrintedInPage= 1;
+
+
 		}
 	} //end of loop around GRNs to print
+
+
+	$vat = 0;
+	$totalAmount = $total + $vat;
+
+	$pdf->SetFontSize(12);
+
+	$pdf->ln(20);
+	$pdf->setX(400);
+	$pdf->Cell( 100, $h = 16, "Total: TSHS" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(520);
+	$pdf->Cell( 100, $h = 16, number_format( $total, 2) , $border = "", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+	$pdf->setX(400);
+	$pdf->Cell( 100, $h = 16, "VAT  TSHS" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(520);
+	$pdf->Cell( 46, $h = 16, "" , $border = "B", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+
+	$pdf->SetFontSize(14);
+	$pdf->setX(400);
+	$pdf->Cell( 100, $h = 16, "TOTAL" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(510);
+	$pdf->Cell( 60, $h = 16, number_format( $totalAmount, 2) , $border = "", $ln = 1, $align = 'R', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+
+	$pdf->SetFontSize(12);
+	$pdf->setY('750');
+	$pdf->setX(30);
+	$pdf->Cell( 100, $h = 16, "Prepared By" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(120);
+	$pdf->Cell( 80, $h = 16, "" , $border = "B", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+	$pdf->setX(400);
+	$pdf->Cell( 100, $h = 16, "Verified By" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(480);
+	$pdf->Cell( 80, $h = 16, "" , $border = "B", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+	$pdf->ln(15);
+
+	$pdf->setX(30);
+	$pdf->Cell( 100, $h = 16, "Name" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(120);
+	$pdf->Cell( 80, $h = 16, "" , $border = "B", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+
+	$pdf->setX(400);
+	$pdf->Cell( 100, $h = 16, "Designation" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(480);
+	$pdf->Cell( 80, $h = 16, "" , $border = "B", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 
 
     $pdf->OutputD($_SESSION['DatabaseName'] . '_GRN_' . $GRNNo . '_' . date('Y-m-d').'.pdf');

@@ -83,6 +83,9 @@ function Calendar(md,dF){
 		x+=p.offsetLeft;
 		y+=p.offsetTop;
 	}
+	if (!dF) {
+		dF = "d/m/Y";
+	}
 	dt=convertDate(iF.value,dF);
 	nN=document.createElement("div");
 	nN.setAttribute("id",dateDivID);

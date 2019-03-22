@@ -64,7 +64,15 @@ if (isset($_POST['submit'])) {
 									gllink_debtors='" . $_POST['GLLink_Debtors'] . "',
 									gllink_creditors='" . $_POST['GLLink_Creditors'] . "',
 									gllink_stock='" . $_POST['GLLink_Stock'] ."',
-									freightact='" . $_POST['FreightAct'] . "'
+									freightact='" . $_POST['FreightAct'] . "',
+									location_1='" . $_POST['location_1'] . "',
+									location_2='" . $_POST['location_2'] . "',
+									office_1='" . $_POST['office_1'] . "',
+									office_2='" . $_POST['office_2'] . "',
+									fax_2='" . $_POST['fax_2'] . "',
+									telephone_2='" . $_POST['telephone_2'] . "',
+									website='" . $_POST['website'] . "'
+
 								WHERE coycode=1";
 
 			$ErrMsg =  _('The company preferences could not be updated because');
@@ -129,7 +137,15 @@ if ($InputError != 1) {
 					gllink_debtors,
 					gllink_creditors,
 					gllink_stock,
-					freightact
+					freightact,
+					location_1,
+					location_2,
+					office_1,
+					office_2,
+					fax_2,
+					telephone_2,
+					website
+
 				FROM companies
 				WHERE coycode=1";
 
@@ -163,7 +179,13 @@ if ($InputError != 1) {
 	$_POST['GLLink_Debtors'] = $myrow['gllink_debtors'];
 	$_POST['GLLink_Creditors'] = $myrow['gllink_creditors'];
 	$_POST['GLLink_Stock'] = $myrow['gllink_stock'];
-	$_POST['FreightAct'] = $myrow['freightact'];
+	$_POST['location_1'] = $myrow['location_1'];
+	$_POST['location_2'] = $myrow['location_2'];
+	$_POST['office_1'] = $myrow['office_1'];
+	$_POST['office_2'] = $myrow['office_2'];
+	$_POST['fax_2'] = $myrow['fax_2'];
+	$_POST['telephone_2'] = $myrow['telephone_2'];
+	$_POST['website'] = $myrow['website'];
 }
 
 echo '<tr>
@@ -226,6 +248,40 @@ echo '<tr>
 		<td><input '.(in_array('Email',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="12" type="email" name="Email" title="' . _('Enter the main company email address. This will appear on invoices and statements.') . '" required="required" placeholder="accounts@example.com" size="50" maxlength="55" value="' . $_POST['Email'] . '" /></td>
 	</tr>';
 
+echo '<tr>
+		<td>' . _('Location 1') . ':</td>
+		<td><input '.(in_array('location_1',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="location_1" size="26" maxlength="255" value="' . $_POST['location_1'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Location 2') . ':</td>
+		<td><input '.(in_array('location_2',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="location_2" size="26" maxlength="255" value="' . $_POST['location_2'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Office 1') . ':</td>
+		<td><input '.(in_array('office_1',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="office_1" size="26" maxlength="255" value="' . $_POST['office_1'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Office 2') . ':</td>
+		<td><input '.(in_array('office_2',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="office_2" size="26" maxlength="255" value="' . $_POST['office_2'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Facsimile Number 2') . ':</td>
+		<td><input '.(in_array('fax_2',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="fax_2" size="26" maxlength="255" value="' . $_POST['fax_2'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Telephone 2') . ':</td>
+		<td><input '.(in_array('telephone_2',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="telephone_2" size="26" maxlength="255" value="' . $_POST['telephone_2'] . '" /></td>
+	</tr>';
+
+echo '<tr>
+		<td>' . _('Website') . ':</td>
+		<td><input '.(in_array('website',$Errors) ?  'class="inputerror"' : '' ) .' tabindex="11" type="text" name="website" size="26" maxlength="255" value="' . $_POST['website'] . '" /></td>
+	</tr>';
 
 $result=DB_query("SELECT currabrev, currency FROM currencies");
 include('includes/CurrenciesArray.php'); // To get the currency name from the currency code.

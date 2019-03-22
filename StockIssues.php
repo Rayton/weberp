@@ -127,7 +127,7 @@ echo '<input type="hidden" name="FormID" value="' . $_SESSION['FormID'] . '" />'
 	for ($RowCount=1;$RowCount<=$numRows;$RowCount++){
 
 		echo '<tr>
-				<td><input type="text" required id="stockcode'.$RowCount .'" name="StockCode_' . $RowCount . '" maxlength="20" size="20" /></td>
+				<td><input type="text" id="stockcode'.$RowCount .'" name="StockCode_' . $RowCount . '" maxlength="20" size="20" /></td>
 				<td><input type="text" required id="stockdescription'.$RowCount .'" name="StockDescription_' . $RowCount . '" maxlength="50" size="50" /></td>
 				
 				<td><input type="text" required name="StockQuantity_' . $RowCount . '" maxlength="20" size="20" /></td>
@@ -311,7 +311,7 @@ function printMessage($Msg, $Type = 'info', $Prefix = '') {
 	<div class="alert alert-<?php echo $Type  ?>">
 		
 	<?php
-	echo $Msg.'<br>';
+	echo $Msg;
 	echo $Type[0][1].'<br>';
 
 	?>

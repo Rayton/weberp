@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form name="Goods Received Note">
-	<PaperSize name="Paper size">A4_Landscape</PaperSize>
+	<PaperSize name="Paper size">A4</PaperSize>
 	<LineHeight name="Line height">12</LineHeight>
 	<logo type="image" name="Logo" id="Logo">
 		<x>20</x>
