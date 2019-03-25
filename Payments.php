@@ -1396,6 +1396,7 @@ the fields for entry of receipt amt and disc */
 				<p>' . _('Total Input Amount').':<input type="text" id="ttl" value="0" readonly>' .' <input type="button" data-ids="' . $ids . '" value="' . _('Update') . '" onclick="update1(\''.$ids.'\')" id="update" /></p>
 				<table class="selection">';
 
+
 	// If the script was called with a SupplierID, it allows to input a customised gltrans.narrative, supptrans.suppreference and supptrans.transtext:
 	// Info to be inserted on `gltrans`.`narrative` varchar(200):
 	if(!isset($_POST['gltrans_narrative'])) {
@@ -1438,5 +1439,8 @@ the fields for entry of receipt amt and disc */
 echo '</div>
 	</form>';
 
+?>
+<script src="javascripts/additionalFunctions.js"></script>
+<?php
 include('includes/footer.php');
 ?>
