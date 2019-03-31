@@ -17,19 +17,19 @@ if(isset($_POST['SelectedUser']) and $_POST['SelectedUser']<>'') {//If POST not 
 	unset($SelectedUser);
 }
 
-if(isset($_POST['SelectedGLAccount']) and $_POST['SelectedGLAccount']<>'') {//If POST not empty:
-	$SelectedGLAccount = mb_strtoupper($_POST['SelectedGLAccount']);
-} elseif(isset($_GET['SelectedGLAccount']) and $_GET['SelectedGLAccount']<>'') {//If GET not empty:
-	$SelectedGLAccount = mb_strtoupper($_GET['SelectedGLAccount']);
-} else {// Unset empty SelectedGLAccount:
-	unset($_GET['SelectedGLAccount']);
-	unset($_POST['SelectedGLAccount']);
-	unset($SelectedGLAccount);
+if(isset($_POST['SelectedGLAccounts']) and $_POST['SelectedGLAccounts']<>'') {//If POST not empty:
+	$SelectedGLAccounts = $_POST['SelectedGLAccounts'];
+} elseif(isset($_GET['SelectedGLAccounts']) and $_GET['SelectedGLAccounts']<>'') {//If GET not empty:
+	$SelectedGLAccounts = $_GET['SelectedGLAccounts'];
+} else {// Unset empty SelectedGLAccounts:
+	unset($_GET['SelectedGLAccounts']);
+	unset($_POST['SelectedGLAccounts']);
+	unset($SelectedGLAccounts);
 }
 
 if(isset($_GET['Cancel']) or isset($_POST['Cancel'])) {
 	unset($SelectedUser);
-	unset($SelectedGLAccount);
+	unset($SelectedGLAccounts);
 }
 
 
@@ -88,39 +88,47 @@ if(!isset($SelectedUser)) {// If is NOT set a user for GL accounts.
 
 	// BEGIN: Needs $SelectedUser, $SelectedGLAccount:
 	if(isset($_POST['submit'])) {
-		if(!isset($SelectedGLAccount)) {
+		if(!isset($SelectedGLAccounts)) {
 			prnMsg(_('You have not selected an GL Account to be authorised for this user'), 'error');
 		} else {
 			// First check the user is not being duplicated
-			$CheckResult = DB_query("
+			
+			foreach ($SelectedGLAccounts as $SelectedGLAccount) {
+				$SelectedGLAccount = mb_strtoupper($SelectedGLAccount);
+				$CheckResult = DB_query("
 				SELECT count(*)
 				FROM glaccountusers
 				WHERE accountcode= '" . $SelectedGLAccount . "'
 				AND userid = '" . $SelectedUser . "'");
-			$CheckRow = DB_fetch_row($CheckResult);
-			if($CheckRow[0] > 0) {
-				prnMsg(_('The GL Account') . ' ' . $SelectedGLAccount . ' ' . _('is already authorised for this user'), 'error');
-			} else {
-				// Add new record on submit
-				$SQL = "INSERT INTO glaccountusers (
-								accountcode,
-								userid,
-								canview,
-								canupd
-							) VALUES ('" .
-								$SelectedGLAccount . "','" .
-								$SelectedUser . "',
-								'1',
-								'1')";
-				$ErrMsg = _('An access permission to a GL account could not be added');
-				if(DB_query($SQL, $ErrMsg)) {
-					prnMsg(_('An access permission to a GL account was added') . '. ' . _('User') . ': ' . $SelectedUser . '. ' . _('GL Account') . ': ' . $SelectedGLAccount . '.', 'success');
-					unset($_GET['SelectedGLAccount']);
-					unset($_POST['SelectedGLAccount']);
+
+				$CheckRow = DB_fetch_row($CheckResult);
+				if($CheckRow[0] > 0) {
+					prnMsg(_('The GL Account') . ' ' . $SelectedGLAccount . ' ' . _('is already authorised for this user'), 'error');
+				} else {
+					// Add new record on submit
+					$SQL = "INSERT INTO glaccountusers (
+									accountcode,
+									userid,
+									canview,
+									canupd
+								) VALUES ('" .
+									$SelectedGLAccount . "','" .
+									$SelectedUser . "',
+									'1',
+									'1')";
+					$ErrMsg = _('An access permission to a GL account could not be added');
+					if(DB_query($SQL, $ErrMsg)) {
+						prnMsg(_('An access permission to a GL account was added') . '. ' . _('User') . ': ' . $SelectedUser . '. ' . _('GL Account') . ': ' . $SelectedGLAccount . '.', 'success');
+						unset($_GET['SelectedGLAccounts']);
+						unset($_POST['SelectedGLAccounts']);
+					}
 				}
+				
 			}
+			
 		}
 	} elseif(isset($_GET['delete']) or isset($_POST['delete'])) {
+		$SelectedGLAccount = $_GET['SelectedGLAccount'];
 		$SQL = "DELETE FROM glaccountusers
 			WHERE accountcode='" . $SelectedGLAccount . "'
 			AND userid='" . $SelectedUser . "'";
@@ -131,6 +139,7 @@ if(!isset($SelectedUser)) {// If is NOT set a user for GL accounts.
 			unset($_POST['delete']);
 		}
 	} elseif(isset($_GET['ToggleUpdate']) or isset($_POST['ToggleUpdate'])) {// Can update (write) GL accounts flag.
+		$SelectedGLAccount = $_GET['SelectedGLAccount'];
 		if(isset($_GET['ToggleUpdate']) and $_GET['ToggleUpdate']<>'') {//If GET not empty.
 			$ToggleUpdate = $_GET['ToggleUpdate'];
 		} elseif(isset($_POST['ToggleUpdate']) and $_POST['ToggleUpdate']<>'') {//If POST not empty.
@@ -219,12 +228,12 @@ if(!isset($SelectedUser)) {// If is NOT set a user for GL accounts.
 		ORDER BY accountcode");
 	if(DB_num_rows($Result)>0) {// If the user does not have access permissions to one or more GL accounts:
 		echo	_('Add access permissions to a GL account'), ':</td>
-				<td><select name="SelectedGLAccount">';
-		if(!isset($_POST['SelectedGLAccount'])) {
+				<td><select name="SelectedGLAccounts[]" multiple="multiple" size="25">';
+		if(!isset($_POST['SelectedGLAccounts'])) {
 			echo '<option selected="selected" value="">', _('Not Yet Selected'), '</option>';
 		}
 		while ($MyRow = DB_fetch_array($Result)) {
-			if(isset($_POST['SelectedGLAccount']) and $MyRow['accountcode'] == $_POST['SelectedGLAccount']) {
+			if(isset($_POST['SelectedGLAccounts']) and $MyRow['accountcode'] == $_POST['SelectedGLAccounts']) {
 				echo '<option selected="selected" value="';
 			} else {
 				echo '<option value="';
