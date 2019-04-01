@@ -4,9 +4,13 @@ if ($PageNumber>1){
 	$pdf->newPage();
 }
 
-$pdf->addJpegFromFile($_SESSION['LogoFile'] ,$FormDesign->logo->x,$Page_Height-110,$FormDesign->logo->width,$FormDesign->logo->height);
-$pdf->addJpegFromFile($_SESSION['LogoFile2'] ,500,$Page_Height-110,$FormDesign->logo->width,$FormDesign->logo->height);
+if (@$_SESSION['LogoFile']) {
+	$pdf->addJpegFromFile($_SESSION['LogoFile'] ,$FormDesign->logo->x,$Page_Height-110,$FormDesign->logo->width,$FormDesign->logo->height);	
+}
 
+if (@$_SESSION['LogoFile2']) {
+	$pdf->addJpegFromFile($_SESSION['LogoFile2'] ,500,$Page_Height-110,$FormDesign->logo->width,$FormDesign->logo->height);
+}
 
 $company = array (
 	'lgfontSize' =>  20,
@@ -19,32 +23,53 @@ $pdf->SetFontSize(20);
 $pdf->Cell( $w=0, $h = 0, $txt = $company['details']['coyname'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 $pdf->SetFontSize(10);
 
-$pdf->setX(110);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['location_1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-$pdf->setX(330);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['location_2'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+if (@ $company['details']['location_1'] && @$company['details']['location_2']) {
+	$pdf->setX(110);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['location_1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(330);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['location_2'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}else {
+	$pdf->Cell( $w=0, $h = 11, $txt = $company['details']['location_1'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}
+
+if (@$company['details']['office_1'] && @$company['details']['regoffice2']) {
+	$pdf->setX(110);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['office_1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(330);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice2'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );	
+}else {
+	$pdf->Cell( $w=0, $h = 11, $txt = $company['details']['office_1'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}
 
 
-$pdf->setX(110);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['office_1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-$pdf->setX(330);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice2'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-
-$pdf->setX(110);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-$pdf->setX(330);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice6'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-
-$pdf->setX(110);
-$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice5'].', '. $company['details']['regoffice6'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-$pdf->setX(330);
-$pdf->Cell( $w=250, $h = 11, $txt ='' , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+if (@$company['details']['regoffice1'] && @$company['details']['regoffice6']) {
+	$pdf->setX(110);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice1'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(330);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice6'] , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}else {
+	$pdf->Cell( $w=0, $h = 11, $txt = $company['details']['regoffice1'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}
 
 
-$pdf->setX(110);
-$pdf->Cell( $w=250, $h = 11, $txt = "Phone: ". $company['details']['telephone'].' Fax: '. $company['details']['fax'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
-$pdf->setX(330);
-$pdf->Cell( $w=250, $h = 11, $txt ='Tel '. $company['details']['telephone_2'] . " Fax" . $company['details']['fax_2']  , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+if (@$company['details']['regoffice5']) {
+	$pdf->setX(110);
+	$pdf->Cell( $w=250, $h = 11, $txt = $company['details']['regoffice5'].', '. $company['details']['regoffice6'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(330);
+	$pdf->Cell( $w=250, $h = 11, $txt ='' , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );	
+}else {
+	$pdf->Cell( $w=0, $h = 11, $txt = $company['details']['regoffice5'].', '. $company['details']['regoffice6'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );	
+}
+
+
+if (@ $company['details']['telephone'] && @$company['details']['telephone_2']) {
+	$pdf->setX(110);
+	$pdf->Cell( $w=250, $h = 11, $txt = "Phone: ". $company['details']['telephone'].' Fax: '. $company['details']['fax'] , $border = 0, $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->setX(330);
+	$pdf->Cell( $w=250, $h = 11, $txt ='Tel '. $company['details']['telephone_2'] . " Fax" . $company['details']['fax_2']  , $border = 0, $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );	
+}else {
+	$pdf->Cell( $w=0, $h = 11, $txt = "Phone: ". $company['details']['telephone'].' Fax: '. $company['details']['fax'] , $border = 0, $ln = 1, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+}
 
 
 $pdf->setX(110);
