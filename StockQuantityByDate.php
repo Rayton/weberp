@@ -100,168 +100,126 @@ echo '<tr>
 	</form>';
 
 $TotalQuantity = 0;
+$TotalPrice = 0;
 $stockItems = array();
+
+$StockLocations = $_POST['StockLocation'];
+
+$locations = "";
+foreach ($StockLocations as $StockLocation) {
+	$locations .= "'$StockLocation',";
+}
+$locations = rtrim($locations,',');
 
 if (isset($_POST['ShowStatus']) and (is_date($_POST['OnHandDate']) || is_date($_POST['StartDate']))) {
 
-	$SQLOnHandDate = FormatDateForSQL($_POST['OnHandDate']);
-	$SQLStartDate = FormatDateForSQL($_POST['StartDate']);
-	$stockLocations = $_POST['StockLocation'];
 
-
-	if ($_POST['StockCategory'] == 'All') {
-		$SQL = "SELECT stockid,
-						 description,
-						 decimalplaces
-					 FROM stockmaster
-					 WHERE (mbflag='M' OR mbflag='B')";
+if ($_POST['StockCategory']=='All') {
+		$sql = "SELECT stockid,
+				description,
+				decimalplaces
+			FROM stockmaster
+			WHERE (mbflag='M' OR mbflag='B')";
 	} else {
-		$SQL = "SELECT stockid,
-						description,
-						decimalplaces
-					 FROM stockmaster
-					 WHERE categoryid = '" . $_POST['StockCategory'] . "'
-					 AND (mbflag='M' OR mbflag='B')";
+		$sql = "SELECT stockid,
+				description,
+				decimalplaces
+			FROM stockmaster
+			WHERE categoryid = '" . $_POST['StockCategory'] . "'
+			AND (mbflag='M' OR mbflag='B')";
 	}
 
 	$ErrMsg = _('The stock items in the category selected cannot be retrieved because');
 	$DbgMsg = _('The SQL that failed was');
 
+	$StockResult = DB_query($sql, $db, $ErrMsg, $DbgMsg);
 
-	$StockResult = DB_query($SQL, $ErrMsg, $DbgMsg);
+	$SQLOnHandDate = FormatDateForSQL($_POST['OnHandDate']);
 
+	echo '<br /><table cellpadding="5" cellspacing="1" class="selection">';
 
-	while ($MyRow = DB_fetch_array($StockResult)) {
-		array_push($stockItems, $MyRow);
-
-	}
-
-	$total = 0;
-	$totalquantity = 0;
-
-
-
-	echo '<table>
-			<tr>
+	$tableheader = '<tr>
 				<th>' . _('Item Code') . '</th>
 				<th>' . _('Description') . '</th>
 				<th>' . _('Quantity On Hand') . '</th>
-				<th>' . _('Unit Cost') . '</th>
-				<th>' . _('Total Cost') . '</th>
-				<th>' . _('Controlled') . '</th>
-			</tr>';
+				<th>' . _('Standard Cost') . '</th>
+				<th>' . _('Price') . '</th>
+				</tr>';
+	echo $tableheader;
 
-	foreach ($stockItems as $key => $stockItem) {
+	while ($myrows=DB_fetch_array($StockResult)) {
 
-		$totalCost = 0;
-		$Controlled = "";
-		$totalStandardcost = 0;
-		$quantity = 0;
-		
-		foreach ($stockLocations as $stockLocation) {
-			$stockSQL = "SELECT stockmoves.stockid,
-						stockmoves.newqoh,
-						stockmoves.standardcost,
-						stockmoves.newqoh * stockmoves.standardcost as cost,
-						stockmaster.controlled
-					FROM stockmoves INNER JOIN stockmaster ON stockmaster.stockid = stockmoves.stockid
-					WHERE stockmoves.stockid = '" . $stockItem['stockid'] . "'
-					AND loccode = '" . $stockLocation . "' AND stockmoves.type IN (17, 25)";
+		$sql = "SELECT stockid,
+				newqoh * standardcost as price,
+				newqoh,
+				standardcost
+				FROM stockmoves
+				WHERE stockmoves.trandate <= '". $SQLOnHandDate . "'
+				AND stockid = '" . $myrows['stockid'] . "'
+				AND loccode IN ($locations)
+				ORDER BY stkmoveno DESC LIMIT 1";
+		$ErrMsg =  _('The stock held as at') . ' ' . $_POST['OnHandDate'] . ' ' . _('could not be retrieved because');
 
-			if (@$SQLOnHandDate) {
-				$stockSQL .= " AND stockmoves.trandate <= '" . $SQLOnHandDate . "'";
+		$LocStockResult = DB_query($sql, $db, $ErrMsg);
+
+		$NumRows = DB_num_rows($LocStockResult, $db);
+
+		$j = 1;
+		$k=0; //row colour counter
+
+		while ($LocQtyRow=DB_fetch_array($LocStockResult)) {
+			if ($k==1){
+				echo '<tr class="OddTableRows">';
+				$k=0;
+			} else {
+				echo '<tr class="EvenTableRows">';
+				$k=1;
 			}
 
-			if (@$SQLStartDate and $SQLStartDate != "") {
-				$stockSQL .= " AND stockmoves.trandate >= '" . $SQLStartDate . "'";
-			}
-
-			$stockSQL .= " ORDER BY trandate DESC LIMIT 1";
-
-			if ($stockItem['stockid'] == "20-01-01-04A") {
-				 echo "<pre>"; print_r($stockSQL);echo "</pre>";
-			}
-
-
-			$ErrMsg = _('The stock held as at') . ' ' . $_POST['OnHandDate'] . ' ' . _('could not be retrieved because');
-
-			$LocStockResult = DB_query($stockSQL, $ErrMsg);
-
-			$NumRows = DB_num_rows($LocStockResult);
-
-			while ($LocQtyRow = DB_fetch_array($LocStockResult)) {
-				if ($LocQtyRow['standardcost'] > 0) {
-					$totalCost += $LocQtyRow['cost'];
-					$total += $LocQtyRow['cost'];
-					$totalStandardcost += $LocQtyRow['standardcost'];
-					$quantity += $LocQtyRow['newqoh'];
-					$totalquantity += $LocQtyRow['newqoh'];
-
-					if ($LocQtyRow['controlled'] == 1) {
-						$Controlled = _('Yes');
-					} else {
-						$Controlled = _('No');
-					}
-				}
-			}
-
-
-		}
-
-		if ($totalCost > 0) {
-			
-			$stockItems[$key]['quantity'] = $quantity;
-			$stockItems[$key]['standardcost'] = $totalStandardcost;
-			$stockItems[$key]['cost'] = $totalCost; 
-			$stockItems[$key]['controlled'] = $Controlled;
-
-			if (empty($_POST['ShowZeroStocks'])) {
-				printf('<tr class="striped_row">
-					<td><a target="_blank" href="' . $RootPath . '/StockStatus.php?%s">%s</a></td>
+			if($NumRows == 0){
+				printf('<td><a target="_blank" href="StockStatus.php?%s">%s</td>
 					<td>%s</td>
 					<td class="number">%s</td>
 					<td class="number">%s</td>
 					<td class="number">%s</td>
+					',
+					'StockID=' . mb_strtoupper($myrows['stockid']),
+					mb_strtoupper($myrows['stockid']),
+					$myrows['description'],
+					0,
+					0,
+					0);
+			} else {
+				printf('<td><a target="_blank" href="StockStatus.php?%s">%s</td>
+					<td>%s</td>
 					<td class="number">%s</td>
-					</tr>',
-					'StockID=' . mb_strtoupper($stockItem['stockid']), 
-					mb_strtoupper($stockItem['stockid']), 
-					$stockItem['description'],
-					locale_number_format($quantity, $stockItem['decimalplaces']),
-					locale_number_format($totalStandardcost),
-					locale_number_format($totalCost), 
-					$Controlled
-				);
-			}else {
-				if ($quantity > 0) {
-					printf('<tr class="striped_row">
-						<td><a target="_blank" href="' . $RootPath . '/StockStatus.php?%s">%s</a></td>
-						<td>%s</td>
-						<td class="number">%s</td>
-						<td class="number">%s</td>
-						<td class="number">%s</td>
-						<td class="number">%s</td>
-						</tr>',
-						'StockID=' . mb_strtoupper($stockItem['stockid']), 
-						mb_strtoupper($stockItem['stockid']), 
-						$stockItem['description'],
-						locale_number_format($quantity, $stockItem['decimalplaces']),
-						locale_number_format($totalStandardcost),
-						locale_number_format($totalCost), 
-						$Controlled
-					);
-				}
+					<td class="number">%s</td>
+					<td class="number">%s</td>
+					',
+					'StockID=' . mb_strtoupper($myrows['stockid']),
+					mb_strtoupper($myrows['stockid']),
+					$myrows['description'],
+					locale_number_format($LocQtyRow['newqoh'],$myrows['decimalplaces']),
+					locale_number_format($LocQtyRow['standardcost'],$myrows['decimalplaces']),
+					locale_number_format($LocQtyRow['price'],$myrows['decimalplaces']));
+
+				$TotalQuantity += $LocQtyRow['newqoh'];
+				$TotalPrice += $LocQtyRow['price'];
 			}
+			$j++;
+			if ($j == 12){
+				$j=1;
+				echo $tableheader;
+			}
+		//end of page full new headings if
+		}
 
-		}		
-	}
-
-
-
-echo '<tr >
-			<td></td><td></td><td></td><td></td><td>' . _('Total Value') . ': ' . locale_number_format($total) . '</td>
-		</tr>
-		</table>';
+	}//end of while loop
+	echo '<tr>
+	<td colspan="3" style="text-align: right;">' . _('Total Quantity') . ': ' . $TotalQuantity . '</td>
+	<td></td>
+	<td style="text-align: right;">' . _('Total Price') . ': ' . $TotalPrice . '</td>
+	</tr></table>';
 
 
 }

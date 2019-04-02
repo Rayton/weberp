@@ -785,7 +785,7 @@
 			return $Errors;
 		}
 		list($TranDate, $description) = explode("_",$TranDateDescription);
-		$description = addslashes($description);
+		$description = htmlspecialchars($description);
 		
 		$Errors = VerifyStockCodeExists($StockID, sizeof($Errors), $Errors);
 		/*
