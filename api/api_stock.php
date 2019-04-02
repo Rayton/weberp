@@ -785,6 +785,8 @@
 			return $Errors;
 		}
 		list($TranDate, $description) = explode("_",$TranDateDescription);
+		$description = addslashes($description);
+		
 		$Errors = VerifyStockCodeExists($StockID, sizeof($Errors), $Errors);
 		/*
 		$balances=GetStockBalance($StockID, $user, $password);
@@ -814,6 +816,8 @@
 		$adjglact=GetCategoryGLCode($itemdetails[1]['categoryid'], 'adjglact');
 		$stockact=GetCategoryGLCode($itemdetails[1]['categoryid'], 'stockact');
 
+		$standardcost = $itemdetails[1]['materialcost']+ $itemdetails[1]['labourcost']+ $itemdetails[1]['overheadcost'];
+
 		$stockmovesql="INSERT INTO stockmoves (stockid,
                                                type,
                                                transno,
@@ -822,7 +826,9 @@
                                                prd,
                                                reference,
                                                qty,
-                                               newqoh)
+                                               newqoh,
+                                               standardcost
+                                               )
                                VALUES ('" . $StockID . "',
                                        '17',
                                        '" .GetNextTransNo(17)."',
@@ -831,10 +837,12 @@
                                        '".GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors)."',
                                        '".$description."',
                                        '" .$Quantity."',
-                                       '" .$newqoh."')";
+                                       '" .$newqoh."',
+                                   	   '" .$standardcost."')";
 		$locstocksql='UPDATE locstock SET quantity = quantity + '.$Quantity."
                              WHERE loccode='".$Location."'
                              AND stockid='".$StockID."'";
+
 		$glupdatesql1="INSERT INTO gltrans (type,
                                             typeno,
                                             trandate,
@@ -847,8 +855,8 @@
                                            '" . $TranDate. "',
                                            '".GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors). "',
                                            '" .$adjglact."',
-                                           '".$itemdetails['materialcost']*-$Quantity. "',
-                                           '" .$StockID.' x '.$Quantity.' @ '.$itemdetails['materialcost']."')";
+                                           '".$itemdetails[1]['materialcost']*-$Quantity. "',
+                                           '" .$StockID.' x '.$Quantity.' @ '.$itemdetails[1]['materialcost']."')";
 		$glupdatesql2="INSERT INTO gltrans (type,
                                             typeno,
                                             trandate,
@@ -861,8 +869,8 @@
                         '" .$TranDate."',
                         '" .GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors). "',
                         '" .$stockact."',
-                        '" .$itemdetails['materialcost']*$Quantity. "',
-                        '" .$StockID.' x '.$Quantity.' @ '.$itemdetails['materialcost']."')";
+                        '" .$itemdetails[1]['materialcost']*$Quantity. "',
+                        '" .$StockID.' x '.$Quantity.' @ '.$itemdetails[1]['materialcost']."')";
 		$systypessql = "UPDATE systypes set typeno='".GetNextTransNo(17)."' where typeid='17'";
 
 		DB_Txn_Begin();

@@ -27,6 +27,10 @@ function inArray(v,tA,m){
 	return false;
 }
 function isDate(dS,dF){
+
+	if (empty(dF)) {
+		dF = "d/m/Y";
+	}
 	
 	var mA=dS.match(/^(\d{1,2})(\/|-|.)(\d{1,2})(\/|-|.)(\d{4})$/);
 	if (mA==null){
