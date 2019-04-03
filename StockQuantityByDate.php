@@ -190,21 +190,25 @@ if ($_POST['StockCategory']=='All') {
 					0,
 					0);
 			} else {
-				printf('<td><a target="_blank" href="StockStatus.php?%s">%s</td>
-					<td>%s</td>
-					<td class="number">%s</td>
-					<td class="number">%s</td>
-					<td class="number">%s</td>
-					',
-					'StockID=' . mb_strtoupper($myrows['stockid']),
-					mb_strtoupper($myrows['stockid']),
-					$myrows['description'],
-					locale_number_format($LocQtyRow['newqoh'],$myrows['decimalplaces']),
-					locale_number_format($LocQtyRow['standardcost'],$myrows['decimalplaces']),
-					locale_number_format($LocQtyRow['price'],$myrows['decimalplaces']));
 
-				$TotalQuantity += $LocQtyRow['newqoh'];
-				$TotalPrice += $LocQtyRow['price'];
+				if ($LocQtyRow['newqoh'] > 0) {
+					printf('<td><a target="_blank" href="StockStatus.php?%s">%s</td>
+						<td>%s</td>
+						<td class="number">%s</td>
+						<td class="number">%s</td>
+						<td class="number">%s</td>
+						',
+						'StockID=' . mb_strtoupper($myrows['stockid']),
+						mb_strtoupper($myrows['stockid']),
+						$myrows['description'],
+						locale_number_format($LocQtyRow['newqoh'],$myrows['decimalplaces']),
+						locale_number_format($LocQtyRow['standardcost'],$myrows['decimalplaces']),
+						locale_number_format($LocQtyRow['price'],$myrows['decimalplaces']));
+
+					$TotalQuantity += $LocQtyRow['newqoh'];
+					$TotalPrice += $LocQtyRow['price'];
+				}
+				
 			}
 			$j++;
 			if ($j == 12){
@@ -216,9 +220,9 @@ if ($_POST['StockCategory']=='All') {
 
 	}//end of while loop
 	echo '<tr>
-	<td colspan="3" style="text-align: right;">' . _('Total Quantity') . ': ' . $TotalQuantity . '</td>
+	<td colspan="3" style="text-align: right;">' . _('Total Quantity') . ': ' . locale_number_format($TotalQuantity,2) . '</td>
 	<td></td>
-	<td style="text-align: right;">' . _('Total Price') . ': ' . $TotalPrice . '</td>
+	<td style="text-align: right;">' . _('Total Price') . ': ' . locale_number_format($TotalPrice, 2) . '</td>
 	</tr></table>';
 
 

@@ -115,7 +115,8 @@ function ConvertToSQLDate($DateEntry) {
 		$Month=$DateArray[1];
 		$Year=$DateArray[0];
 		$Date=$Year.'-'.$Month.'-'.$Day;
-		$sql="SELECT MAX(periodno) FROM periods WHERE lastdate_in_period<='" . $Date . "'";
+		$sql = "SELECT periodno FROM periods WHERE MONTH(lastdate_in_period) = $Month AND YEAR(lastdate_in_period) = $Year";
+		// $sql="SELECT MAX(periodno) FROM periods WHERE lastdate_in_period<='" . $Date . "'";
 		$result=DB_query($sql);
 		$myrow=DB_fetch_array($result);
 		return $myrow[0];
