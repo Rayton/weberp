@@ -843,6 +843,10 @@
                              WHERE loccode='".$Location."'
                              AND stockid='".$StockID."'";
 
+
+
+                            $typeno=GetNextTransNo(17); 
+
 		$glupdatesql1="INSERT INTO gltrans (type,
                                             typeno,
                                             trandate,
@@ -851,7 +855,7 @@
                                             amount,
                                             narrative)
                                     VALUES ('17',
-                                           '" . GetNextTransNo(17)."',
+                                           '" . $typeno."',
                                            '" . $TranDate. "',
                                            '".GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors). "',
                                            '" .$adjglact."',
@@ -865,7 +869,7 @@
                                             amount,
                                             narrative)
 						VALUES ('17',
-                        '" .GetNextTransNo(17)."',
+                        '" .$typeno."',
                         '" .$TranDate."',
                         '" .GetPeriodFromTransactionDate($TranDate, sizeof($Errors), $Errors). "',
                         '" .$stockact."',

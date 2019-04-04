@@ -210,7 +210,7 @@ if (isset($_POST['EnterAdjustment']) AND $_POST['EnterAdjustment']!= ''){
 			$QtyOnHandPrior = 0;
 		}
 
-		echo 'is there problem is quantity on hand prior '.$QtyOnHandPrior; 
+		
 		$SQL = "INSERT INTO stockmoves (stockid,
 										type,
 										transno,
