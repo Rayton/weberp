@@ -3,7 +3,7 @@
 /* Include session.inc, to allow database connection, and access to
    miscfunctions, and datefunctions.*/
 	// FOLLOWING IS ALWAYS REQUIRED
-	$api_DatabaseName='weberp';
+	$api_DatabaseName='weberp_almc';
 
 	$AllowAnyone = true;
 	$PathPrefix=dirname(__FILE__).'/../';

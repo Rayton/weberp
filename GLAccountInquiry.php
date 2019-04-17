@@ -214,6 +214,7 @@ if(isset($_POST['Show'])) {
 				FROM chartdetails
 				WHERE chartdetails.accountcode='" . $SelectedAccount . "'
 				AND chartdetails.period='" . $FirstPeriodSelected . "'";
+				
 		$ErrMsg = _('The chart details for account') . ' ' . $SelectedAccount . ' ' . _('could not be retrieved');
 		$ChartDetailsResult = DB_query($Sql, $ErrMsg);
 		$ChartDetailRow = DB_fetch_array($ChartDetailsResult);
