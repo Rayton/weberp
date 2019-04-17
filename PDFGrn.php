@@ -72,7 +72,8 @@ if ($GRNNo == 'Preview'){
 						suppliers.address3,
 						suppliers.address4,
 						suppliers.address5,
-						suppliers.address6
+						suppliers.address6,
+						suppliers.currcode
 				FROM grns INNER JOIN suppliers
 				ON grns.supplierid=suppliers.supplierid
 				WHERE grnbatch='". $GRNNo ."'";
@@ -195,12 +196,12 @@ if ($NoOfGRNs >0){
 
 	$pdf->ln(20);
 	$pdf->setX(400);
-	$pdf->Cell( 100, $h = 16, "Total: TSHS" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->Cell( 100, $h = 16, "Total: " .$SuppRow['currcode'] , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 	$pdf->setX(520);
 	$pdf->Cell( 100, $h = 16, number_format( $total, 2) , $border = "", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 
 	$pdf->setX(400);
-	$pdf->Cell( 100, $h = 16, "VAT  TSHS" , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+	$pdf->Cell( 100, $h = 16, "VAT  " .$SuppRow['currcode'] , $border = "", $ln = 0, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 	$pdf->setX(520);
 	$pdf->Cell( 46, $h = 16, "" , $border = "B", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 

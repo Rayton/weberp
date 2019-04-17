@@ -133,7 +133,7 @@ $pdf->Cell( $w=150, $h = 11, $txt = "Order Date" , $border = "", $ln = 0, $align
 $pdf->setX(250);
 $pdf->Cell( $w=300, $h = 11, $txt = "Invoice/Cash Sale/Delivery Note No" , $border = "", $ln = 0, $align = 'C', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 $pdf->setX(530);
-$pdf->Cell( $w=300, $h = 11, $txt = "TSHS" , $border = "", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
+$pdf->Cell( $w=300, $h = 11, $txt = $SuppRow['currcode'] , $border = "", $ln = 1, $align = 'L', $fill = false, $link = '', $stretch = 0, $ignore_min_height = false, $calign = 'T', $valign = 'M' );
 $pdf->ln(1);
 
 $pdf->SetFontSize(12);
