@@ -6,13 +6,10 @@ $Title = _('Stock Issues Entry Sheet');
 
 include('includes/header.php');
 
-
-if (!$_SESSION['PageSecurityArray']['getStockItem.php']) {
-	$_SESSION['PageSecurityArray']['getStockItem.php'] = 2;
-	$_SESSION['PageSecurityArray']['getStockItemDescription.php'] = 2;
-	$_SESSION['PageSecurityArray']['getStockItemCode.php'] = 2;
-	$_SESSION['PageSecurityArray']['PostStockItems.php'] = 2;
-}
+$_SESSION['PageSecurityArray']['getStockItem.php'] = $_SESSION['PageSecurityArray']['StockIssues.php'];
+$_SESSION['PageSecurityArray']['getStockItemDescription.php'] = $_SESSION['PageSecurityArray']['StockIssues.php'];
+$_SESSION['PageSecurityArray']['getStockItemCode.php'] = $_SESSION['PageSecurityArray']['StockIssues.php'];
+$_SESSION['PageSecurityArray']['PostStockItems.php'] = $_SESSION['PageSecurityArray']['StockIssues.php'];
 
 if (@$_SESSION['post_issues_messages']) {
 
