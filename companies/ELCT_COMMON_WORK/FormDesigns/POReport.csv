@@ -1,0 +1,13 @@
+"Purchase Order Report","Detail By Order Number
+"Date Type","Order"
+"Date Range","01/12/2010 To 01/12/2010"
+"Line Item Status","All"
+"Stock Category","All"
+"Order No","Part Number","Order Date","Supplier No","Supplier Name","Order Qty","Extended Cost","Extended Price","Invoiced Qty","Line Status","Item Due","Part Description"
+"4","DVD-TOPGUN","01/12/2010","BINGO","Binary Green Ocean Inc",100,0.00,48.00,0,"Open","10/12/2010","Top Gun DVD"
+"4","DVD-CASE","01/12/2010","BINGO","Binary Green Ocean Inc",200,0.00,60.00,0,"Open","10/12/2010","webERP Demo DVD Case"
+"5","DVD-CASE","01/12/2010","BINGO","Binary Green Ocean Inc",200,0.00,0.00,0,"Open","10/12/2010","webERP Demo DVD Case"
+"5","DVD-TOPGUN","01/12/2010","BINGO","Binary Green Ocean Inc",100,0.00,0.00,0,"Open","10/12/2010","Top Gun DVD"
+"6","DVD-TOPGUN","01/12/2010","BINGO","Binary Green Ocean Inc",100,0.00,48.00,0,"Open","01/12/2010","Top Gun DVD"
+"6","DVD-CASE","01/12/2010","BINGO","Binary Green Ocean Inc",200,0.00,60.00,0,"Open","01/12/2010","webERP Demo DVD Case"
+"Totals","Lines - 6"," "," "," ",900.00,0.00,216.00,0.00," "," "

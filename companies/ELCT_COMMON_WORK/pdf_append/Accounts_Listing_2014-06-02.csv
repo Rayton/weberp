@@ -1,0 +1,24 @@
+100742 - 0 for period 34 to 37
+100742, 34, Brought Forward Balance,,,0
+100742,35, Payment - GL,391,23/01/2014,1484000,,Jumbo Construction Co. Ltd - Air ticket for PC Sta,ELCT PC CHAT
+100742, 35, Period Total,,,1484000
+100742,36, Payment - GL,348,05/02/2014,938000,,Dr Paul Mmbando - Trip to Kagera,ELCT PC CHAT
+100742,36, Payment - GL,350,05/02/2014,938000,,Andrew -  Trip to Kagera,ELCT PC CHAT
+100742,36, Payment - GL,352,18/02/2014,800000,,NIC of TZ,ELCT PC CHAT
+100742,36, Payment - GL,353,18/02/2014,2305000,,Anna Mahenge - Trip to Karagwe,ELCT PC CHAT
+100742,36, Payment - GL,355,18/02/2014,742000,,Jumbo Construction Co. Ltd - Air ticket for Andrew,ELCT PC CHAT
+100742, 36, Period Total,,,5723000
+100742,37, Payment - GL,370,07/03/2014,1510000,,Jumbo Construction Co. Ltd - Air ticket for PC Sta,ELCT PC CHAT
+100742,37, Receipt,84,11/03/2014,,1484000,Refund from Africare,ELCT PC CHAT
+100742,37, Payment - GL,366,12/03/2014,5000000,,Advance to Marangu Project,ELCT Marangu Hospital
+100742,37, Payment - GL,371,12/03/2014,1000000,,National Insurance Corp of Tz,ELCT PC CHAT
+100742,37, Payment - GL,372,12/03/2014,800000,,National Insurance of Tz,ELCT PC CHAT
+100742,37, Payment - GL,385,26/03/2014,800000,,NIC of TZ,ELCT Marangu Hospital
+100742,37, Payment - GL,386,26/03/2014,192000,,Noel CM - Vehicle maintainance,ELCT Repr Health
+100742,37, Receipt,70,28/03/2014,,1000000,Refund from Africare,ELCT PC CHAT
+100742,37, Receipt,71,28/03/2014,,938000,Refund from Africare,ELCT PC CHAT
+100742,37, Receipt,72,28/03/2014,,938000,Refund from Africare,ELCT PC CHAT
+100742,37, Receipt,73,28/03/2014,,742000,Refund from Africare,ELCT PC CHAT
+100742,37, Receipt,85,28/03/2014,,800000,Refund from Africare,ELCT PC CHAT
+100742, 37, Period Total,,,3400000
+100742,37, Balance C/Fwd,,,10607000

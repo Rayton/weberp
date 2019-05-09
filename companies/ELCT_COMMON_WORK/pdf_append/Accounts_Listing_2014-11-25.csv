@@ -1,0 +1,41 @@
+100300 - 0 for period 35 to 44
+100300, 35, Brought Forward Balance,,,9543499.25
+100300,35, Payment - GL,3503,25/01/2014,225484,,PV 62 chq. 9972 NSSF-Arusha,Mwanga School for the Deaf
+100300, 35, Period Total,,,225484
+100300,36, Payment - GL,3615,24/02/2014,35889.6,,PV 149 chq. 10059 PAYE-February 2014,Mwanga School for the Deaf
+100300,36, Payment - GL,3616,24/02/2014,225484,,PV 150 chq. 10060 NSSF February 2014,Mwanga School for the Deaf
+100300,36, Payment - GL,3617,24/02/2014,156554,,PV 151 chq. 10061 PPF-February 2014,Mwanga School for the Deaf
+100300, 36, Period Total,,,417927.6
+100300,37, Payment - GL,3685,26/03/2014,35889.6,,PV 211 chq. 10121 PAYE-March 2014,Mwanga School for the Deaf
+100300,37, Payment - GL,4652,26/03/2014,,35889.6,STALE - PV 211 chq. 10121 PAYE-March 2014,Mwanga School for the Deaf
+100300, 37, Period Total,,,0
+100300,38, Payment - GL,3884,27/04/2014,225484,,PV 308 chq. 10218 NSSF-April 2014,Mwanga School for the Deaf
+100300,38, Payment - GL,3885,27/04/2014,156554,,PV 309 chq. 10219 PPF April 2014,Mwanga School for the Deaf
+100300,38, Payment - GL,4653,27/04/2014,,35889.6,STALE-Chq. 10220 PV 310 PAYE April 2014,Mwanga School for the Deaf
+100300,38, Payment - GL,4654,27/04/2014,,225484,STALE chq. 10218 PV 308 NSSF-April 2014,Mwanga School for the Deaf
+100300,38, Journal - GL,529,30/04/2014,156554,,PPF contribution January 2013,Mwanga School for the Deaf
+100300,38, Journal - GL,530,30/04/2014,,156554,PPF contribution January  2013,Mwanga School for the Deaf
+100300, 38, Period Total,,,120664.4
+100300,39, Receipt,2068,19/05/2014,,1404653.59,DE 112 chq.001705 Statutory.-Mwanga deaf,Mwanga School for the Deaf
+100300,39, Payment - GL,3976,26/05/2014,225484,,PV 386 chq. 010296 NSSF-May 2014,Mwanga School for the Deaf
+100300,39, Payment - GL,3977,26/05/2014,156554,,PV 387 chq. 010297 PPF Arusha-May 2014,Mwanga School for the Deaf
+100300,39, Payment - GL,3978,26/05/2014,35889.6,,PV 388 chq. 010298 PAYE-Arusha May 2014,Mwanga School for the Deaf
+100300, 39, Period Total,,,,986725.99
+100300,40, Payment - GL,4205,26/06/2014,35889.6,,PV 454 PAYE June 2014,Mwanga School for the Deaf
+100300,40, Payment - GL,4206,26/06/2014,225484,,PV 455 NSSF-June 2014,Mwanga School for the Deaf
+100300,40, Payment - GL,4208,26/06/2014,156554,,PV 457 PPF-June 2014,Mwanga School for the Deaf
+100300,40, Journal - GL,673,30/06/2014,90723050,,Corr: entry incorrectly posted,
+100300,40, Journal - GL,674,30/06/2014,,90723050,Corr: entry incorrectly posted,
+100300, 40, Period Total,,,417927.59999999
+100300,41, Payment - GL,4293,22/07/2014,33593.4,,PV 514 Income Tax-July 2014,Mwanga School for the Deaf
+100300,41, Payment - GL,4294,22/07/2014,225484,,PV 516 NSSF-July 2014,Mwanga School for the Deaf
+100300,41, Payment - GL,4295,22/07/2014,156554,,PV 517 PPF-July 2014,Mwanga School for the Deaf
+100300, 41, Period Total,,,415631.4
+100300,43, Payment - GL,4410,09/09/2014,225484,,PV 635 NSSF Contr. ELCT-CW &amp; Mwanga Sch. july2013,Mwanga School for the Deaf
+100300,43, Payment - GL,4459,18/09/2014,160014,,PV 657 PPF Contr.Sept 2014,Mwanga School for the Deaf
+100300,43, Payment - GL,4461,18/09/2014,225484,,PV 649 NSSF Staff contr sept 2014.,Mwanga School for the Deaf
+100300,43, Payment - GL,4462,18/09/2014,35461.8,,PV 650 Staff PAYE Contr Sept 2014,Mwanga School for the Deaf
+100300, 43, Period Total,,,646443.8
+100300,44, Receipt,2566,28/10/2014,,1586478.59,DE 226 ELCT-Mwanga School - Statutories- ch.1770,Mwanga School for the Deaf
+100300, 44, Period Total,,,,1586478.59
+100300,44, Balance C/Fwd,,,9214373.47
