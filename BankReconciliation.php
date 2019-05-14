@@ -132,6 +132,15 @@ if (DB_num_rows($AccountsResults)==0){
 		</tr>';
 }
 
+//Date added, was not in weberp version 4.15
+
+echo '<tr>
+		<td>' . _('Bank Statement Date') . '</td>
+		<td><input type="text" class="date" alt="' . $_SESSION['DefaultDateFormat'] . '" name="StatementDate" value="' . $_POST['StatementDate'] . '" size="10" /></td>
+	</tr>';
+
+
+
 /*Now do the posting while the user is thinking about the bank account to select */
 
 include ('includes/GLPostings.inc');
@@ -148,11 +157,24 @@ if (isset($_POST['ShowRec']) OR isset($_POST['DoExchangeDifference'])){
 
 /*Get the balance of the bank account concerned */
 
-	$PeriodNo = GetPeriod(date($_SESSION['DefaultDateFormat']));
+
+
+   if ($_POST['StatementDate']=='') {
+   	$PeriodNo = GetPeriod(date($_SESSION['DefaultDateFormat'])); 
+   	$DisplayDate=date($_SESSION['DefaultDateFormat']);
+   }else{
+   	$PeriodNo=GetPeriod($_POST['StatementDate']);
+   	$DisplayDate=$_POST['StatementDate'];
+   }
+
+
+  
+
+	//$PeriodNo = GetPeriod(date($_SESSION['DefaultDateFormat']));
 
 	$SQL = "SELECT bfwd+actual AS balance
 			FROM chartdetails
-			WHERE period='" . $PeriodNo . "'
+			WHERE period<='" . $PeriodNo . "'
 			AND accountcode='" . $_POST['BankAccount']."'";
 
 	$ErrMsg = _('The bank account balance could not be returned by the SQL because');
@@ -176,13 +198,18 @@ if (isset($_POST['ShowRec']) OR isset($_POST['DoExchangeDifference'])){
 
 	echo '<table class="selection">
 			<tr class="striped_row">
-				<td colspan="6"><b>' . $CurrencyRow['bankaccountname'] . ' ' . _('Balance as at') . ' ' . Date($_SESSION['DefaultDateFormat']);
+				<td colspan="6"><b>' . $CurrencyRow['bankaccountname'] . ' ' . _('Balance as at') . ' ' . $DisplayDate;
 
 	if ($_SESSION['CompanyRecord']['currencydefault']!=$CurrencyRow['currcode']){
 		echo  ' (' . $CurrencyRow['currcode'] . ' @ ' . $CurrencyRow['rate'] .')';
 	}
 	echo '</b></td>
 			<td valign="bottom" class="number"><b>' . locale_number_format($Balance*$CurrencyRow['rate'],$CurrencyRow['currdecimalplaces']) . '</b></td></tr>';
+
+			$trandate=date('Y-m-d',strtotime(str_replace("/", "-", $DisplayDate)));
+
+
+
 
 	$SQL = "SELECT amount/exrate AS amt,
 					amountcleared,
@@ -194,9 +221,13 @@ if (isset($_POST['ShowRec']) OR isset($_POST['DoExchangeDifference'])){
 				FROM banktrans,
 					systypes
 				WHERE banktrans.type = systypes.typeid
-				AND banktrans.bankact='" . $_POST['BankAccount'] . "'
+				AND banktrans.bankact='" . $_POST['BankAccount'] . "' AND transdate<='".$trandate."'
 				AND amount < 0
 				AND ABS((amount/exrate)-amountcleared)>0.009 ORDER BY transdate";
+
+
+
+				
 
 	echo '<tr><td><br /></td></tr>'; /*Bang in a blank line */
 
@@ -264,7 +295,7 @@ if (isset($_POST['ShowRec']) OR isset($_POST['DoExchangeDifference'])){
 				transno
 			FROM banktrans INNER JOIN systypes
 			ON banktrans.type = systypes.typeid
-			WHERE banktrans.bankact='" . $_POST['BankAccount'] . "'
+			WHERE banktrans.bankact='" . $_POST['BankAccount'] . "' AND transdate<='".$trandate."'
 			AND amount > 0
 			AND ABS((amount/exrate)-amountcleared)>0.009 ORDER BY transdate";
 
